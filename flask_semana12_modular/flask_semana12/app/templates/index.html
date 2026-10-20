@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Cadastro de usuários - Flasky{% endblock %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-9">
+        <h1 class="mb-2">
+            Olá{% if name %}, {{ name }}{% endif %}!
+        </h1>
+        {% if name and known %}
+            <p>Que bom ter você de volta.</p>
+        {% elif name %}
+            <p>Prazer em conhecê-lo!</p>
+        {% else %}
+            <p>Cadastre um usuário para testar a aplicação.</p>
+        {% endif %}
+
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h2 class="h5">Novo cadastro</h2>
+                <form method="post">
+                    {{ form.hidden_tag() }}
+                    <div class="mb-3">
+                        {{ form.name.label(class="form-label") }}
+                        {{ form.name(class="form-control", placeholder="Digite o nome de usuário") }}
+                        {% for error in form.name.errors %}
+                            <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    {{ form.submit(class="btn btn-primary") }}
+                </form>
+                <p class="text-muted small mt-3 mb-0">
+                    Ao cadastrar um novo usuário, a aplicação tenta enviar uma notificação
+                    ao professor e outra ao e-mail institucional configurado.
+                </p>
+            </div>
+        </div>
+
+        <h2 class="h4">Usuários cadastrados <span class="badge text-bg-secondary">{{ users_count }}</span></h2>
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered bg-white">
+                <thead><tr><th>ID</th><th>Nome de usuário</th><th>Função</th></tr></thead>
+                <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.role.name if user.role else "Sem função" }}</td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="3" class="text-center">Nenhum usuário cadastrado.</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
